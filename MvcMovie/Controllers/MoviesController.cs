@@ -51,27 +51,25 @@ namespace MvcMovie.Controllers
         }
 
         // GET: Movies/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int? id, bool? boolInfo)
         {
             if (id == null)
             {
                 return NotFound();
             }
-
-            var movie = await _context.Movie
+            if (id == -1)
+                id = 2;
+                var movie = await _context.Movie
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (movie == null)
             {
                 return NotFound();
             }
+            @ViewData["idMax"] = id;
 
+            @ViewData["booleano"] = boolInfo;
             return View(movie);
-        }
-
-        // GET: Movies/Create
-        public IActionResult Create()
-        {
-            return View();
         }
 
         // POST: Movies/Create
@@ -97,7 +95,7 @@ namespace MvcMovie.Controllers
             {
                 return NotFound();
             }
-
+            
             var movie = await _context.Movie.FindAsync(id);
             if (movie == null)
             {
