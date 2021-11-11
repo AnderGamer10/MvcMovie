@@ -6,10 +6,8 @@
 <h1>Details </h1>
 <div>
     <h4>
-        Movie #@if ((bool)ViewData["booleano"] == true)
-        {
-        @Model.Id;
-        }
+        Movie # @Model.Id
+        
     </h4>
     
     <hr />
@@ -41,13 +39,54 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-    <a asp-action="">Prev</a>
-    @if((bool)ViewData["booleano"] == true)
-    {
-    <span>#</span>
-    @Model.Id;
+
+    @{
+        if ((bool)ViewData["booleano"] == false)
+        {
+            <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a><span>|</span>
+            <a asp-action="Index">Back to List</a><span>|</span>
+            if ((bool)ViewData["anterior"] == true)
+                {
+                <a asp-action="Details" asp-route-id="@ViewData["prev"]" asp-route-boolInfo="false">Prev</a>
+                }
+                else
+                {
+                <p style="display:inline-block;">Prev</p>
+            }
+            if ((bool)ViewData["siguiente"] == true)
+            { 
+            <a asp-action="Details" asp-route-id="@ViewData["next"]" asp-route-boolInfo="false">Next</a>
+
+            }
+            else
+            {
+            <p style="display:inline-block;">Next</p>
+            }
+        }
+        else
+        {
+            <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> <span>|</span>
+            <a asp-action="Index">Back to List</a><span>|</span>
+            if ((bool)ViewData["anterior"] == true)
+            { 
+            <a asp-action="Details" asp-route-id="@ViewData["prev"]" asp-route-boolInfo="true">Prev</a>
+
+            }
+            else
+            {
+                <p style="display:inline-block;">Prev</p>
+            }
+            <span>|#</span> @Model.Id;<span>|</span>
+            if ((bool)ViewData["siguiente"] == true)
+            { 
+            <a asp-action="Details" asp-route-id="@ViewData["next"]" asp-route-boolInfo="true">Next</a>
+
+            }
+            else
+            {
+                <p style="display:inline-block;">Next</p>
+            }
+            
+        }
     }
-    <a asp-controller="Movies" asp-action="Details" asp-route-id="">Next</a>
 </div>

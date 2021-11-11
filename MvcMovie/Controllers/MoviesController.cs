@@ -57,16 +57,38 @@ namespace MvcMovie.Controllers
             {
                 return NotFound();
             }
-            if (id == -1)
-                id = 2;
-                var movie = await _context.Movie
-                .FirstOrDefaultAsync(m => m.Id == id);
+            
 
+            var prev = (from x in _context.Movie where x.Id < id orderby x.Id descending select x).FirstOrDefault();
+            var next = (from x in _context.Movie where x.Id > id orderby x.Id ascending select x).FirstOrDefault();
+            
+            if (prev != null)
+            {
+                ViewData["prev"] = prev.Id;
+                ViewData["anterior"] = true;
+            }
+            else
+            {
+                ViewData["anterior"] = false;
+            }
+            if (next != null)
+            {
+                ViewData["next"] = next.Id;
+                ViewData["siguiente"] = true;
+            }
+            else
+            {
+                ViewData["siguiente"] = false;
+
+            }
+
+
+            var movie = await _context.Movie
+              .FirstOrDefaultAsync(m => m.Id == id);
             if (movie == null)
             {
                 return NotFound();
             }
-            @ViewData["idMax"] = id;
 
             @ViewData["booleano"] = boolInfo;
             return View(movie);
